@@ -53,28 +53,28 @@ type alias Model =
 turn : Color -> Direction -> Direction
 turn color direction =
     case ( color, direction ) of
-        ( Black, North ) ->
-            East
-
-        ( Black, East ) ->
-            South
-
-        ( Black, South ) ->
-            West
-
-        ( Black, West ) ->
-            North
-
         ( White, North ) ->
-            West
-
-        ( White, West ) ->
-            South
-
-        ( White, South ) ->
             East
 
         ( White, East ) ->
+            South
+
+        ( White, South ) ->
+            West
+
+        ( White, West ) ->
+            North
+
+        ( Black, North ) ->
+            West
+
+        ( Black, West ) ->
+            South
+
+        ( Black, South ) ->
+            East
+
+        ( Black, East ) ->
             North
 
 
@@ -104,27 +104,28 @@ addPositions ( x1, y1 ) ( x2, y2 ) =
 moveAnt : Model -> Model
 moveAnt ({ world, ant } as model) =
     let
-        newAntPosition =
-            addPositions ant.position (toDelta ant.direction)
-
         oldTileColor =
-            Dict.get newAntPosition world
+            world
+                |> Dict.get ant.position
                 |> Maybe.withDefault White
+
+        newAntDirection =
+            turn oldTileColor ant.direction
 
         newTileColor =
             cycleColor oldTileColor
 
-        newAntDirection =
-            turn newTileColor ant.direction
+        newWorld =
+            Dict.insert ant.position newTileColor world
+
+        newAntPosition =
+            addPositions (toDelta newAntDirection) ant.position
 
         newAnt =
             { ant
                 | position = newAntPosition
                 , direction = newAntDirection
             }
-
-        newWorld =
-            Dict.insert newAntPosition newTileColor world
     in
         { model
             | world = newWorld
