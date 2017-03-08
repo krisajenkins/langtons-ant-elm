@@ -32,6 +32,16 @@ worldView world =
         )
 
 
+toColorCode : Color -> String
+toColorCode color =
+    case color of
+        Black ->
+            "black"
+
+        White ->
+            "white"
+
+
 tileView : Position -> Color -> Svg msg
 tileView position color =
     rect
@@ -39,14 +49,7 @@ tileView position color =
         , y <| toString <| Tuple.second position * tileSize
         , width <| toString tileSize
         , height <| toString tileSize
-        , fill
-            (case color of
-                Black ->
-                    "black"
-
-                White ->
-                    "white"
-            )
+        , fill (toColorCode color)
         ]
         []
 
