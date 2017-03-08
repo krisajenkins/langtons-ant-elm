@@ -1,4 +1,7 @@
-# Template Project
+# Langton's Ant Example Project
+
+
+https://developer.spotify.com/web-api/get-recommendations/
 
 ## Building
 

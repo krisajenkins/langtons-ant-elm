@@ -1,24 +1,31 @@
 module State exposing (..)
 
+import Dict exposing (Dict)
+import Time exposing (millisecond)
 import Types exposing (..)
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { counter = 0 }
+    ( { world = Dict.empty
+      , ant =
+            { position = ( 0, 0 )
+            , direction = North
+            }
+      }
     , Cmd.none
     )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Increment ->
-            ( { model | counter = model.counter + 1 }
+        Tick _ ->
+            ( moveAnt model
             , Cmd.none
             )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Time.every (50 * millisecond) Tick
